@@ -1,0 +1,4 @@
+[submodule "osm_data"]
+	path = osm_data
+	url = https://github.com/laragis/My_OSM.git
+	branch = osm_data
