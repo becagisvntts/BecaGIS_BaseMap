@@ -4,6 +4,8 @@
 
 ```shell
 git submodule add -b osm_data https://github.com/laragis/My_OSM.git osm_data
+
+./scripts/import.sh -i ./vietnam-latest.osm.pbf
 ```
 
 
@@ -15,3 +17,5 @@ git submodule add -b osm_data https://github.com/laragis/My_OSM.git osm_data
 - https://github.com/kartoza/docker-geoserver
 - https://github.com/Overv/openstreetmap-tile-server
 - https://github.com/geobeyond/geoserver-clustering-playground
+
+- https://github.com/openmaptiles/import-osm

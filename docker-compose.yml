@@ -1,0 +1,52 @@
+version: '3.9'
+
+volumes:
+  geoserver-data:
+  geo-db-data:
+
+services:
+  db:
+    image: kartoza/postgis:${POSTGRES_VERSION}
+    volumes:
+      - ${POSTGRES_DATA}:/var/lib/postgresql
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - TIMEZONE=${POSTGRES_TIMEZONE}
+      - ALLOW_IP_RANGE=${ALLOW_IP_RANGE}
+    restart: on-failure
+    healthcheck:
+      test: "PGPASSWORD=${POSTGRES_PASS} pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+
+  geoserver:
+    image: ttungbmt/geoserver:${GEOSERVER_VERSION}
+    build: .
+    restart: on-failure
+    environment:
+      - TOMCAT_EXTRAS=${TOMCAT_EXTRAS}
+      - TOMCAT_USER=${TOMCAT_USER}
+      - TOMCAT_PASSWORD=${TOMCAT_PASSWORD}
+      - GEOSERVER_ADMIN_USER=${GEOSERVER_ADMIN_USER}
+      - GEOSERVER_ADMIN_PASSWORD=${GEOSERVER_ADMIN_PASSWORD}
+      - STABLE_EXTENSIONS=${GEOSERVER_STABLE_EXTENSIONS}
+      - COMMUNITY_EXTENSIONS=${GEOSERVER_COMMUNITY_EXTENSIONS}
+      - INITIAL_MEMORY=${GEOSERVER_INITIAL_MEMORY}
+      - MAXIMUM_MEMORY=${GEOSERVER_MAXIMUM_MEMORY}
+      - SAMPLE_DATA=${GEOSERVER_SAMPLE_DATA}
+      - XFRAME_OPTIONS=${XFRAME_OPTIONS}
+      - ROOT_WEBAPP_REDIRECT=${ROOT_WEBAPP_REDIRECT}
+    volumes:
+      - ${GEOSERVER_DATA}:/opt/geoserver/data_dir
+    ports:
+      - ${GEOSERVER_PORT}:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null -u ${GEOSERVER_ADMIN_USER}:'${GEOSERVER_ADMIN_PASSWORD}' http://localhost:8080/geoserver/rest/about/version.xml"
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
