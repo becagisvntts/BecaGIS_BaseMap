@@ -1,11 +1,26 @@
 version: '3.9'
 
+networks:
+  proxy_overlay:
+    external: true
+      
 volumes:
   geoserver-data:
   geo-db-data:
 
+x-shared:
+  common: &default-common
+    networks:
+      - default
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
 services:
   db:
+    << : *default-common
     image: kartoza/postgis:${POSTGRES_VERSION}
     volumes:
       - ${POSTGRES_DATA}:/var/lib/postgresql
@@ -17,14 +32,12 @@ services:
       - POSTGRES_PASS=${POSTGRES_PASS}
       - TIMEZONE=${POSTGRES_TIMEZONE}
       - ALLOW_IP_RANGE=${ALLOW_IP_RANGE}
-    restart: on-failure
     healthcheck:
       test: "PGPASSWORD=${POSTGRES_PASS} pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
 
   geoserver:
+    << : *default-common
     image: ttungbmt/geoserver:${GEOSERVER_VERSION}
-    build: .
-    restart: on-failure
     environment:
       - TOMCAT_EXTRAS=${TOMCAT_EXTRAS}
       - TOMCAT_USER=${TOMCAT_USER}
@@ -41,7 +54,7 @@ services:
       - POSTGRES_ENDPOINT=${POSTGRES_DB}
       - POSTGRES_PORT=5432
       - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - OSM_DB=${POSTGRES_DB}
       - OSM_SCHEMA=public
       - ADDITIONAL_JAVA_STARTUP_OPTIONS=${ADDITIONAL_JAVA_STARTUP_OPTIONS}
@@ -49,9 +62,9 @@ services:
       - ${GEOSERVER_DATA}:/opt/geoserver/data_dir
     ports:
       - ${GEOSERVER_PORT}:8080
-    depends_on:
-      db:
-        condition: service_healthy
+    networks:
+      - default
+      - proxy_overlay
     healthcheck:
       test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null -u ${GEOSERVER_ADMIN_USER}:'${GEOSERVER_ADMIN_PASSWORD}' http://localhost:8080/geoserver/rest/about/version.xml"
       interval: 1m30s
