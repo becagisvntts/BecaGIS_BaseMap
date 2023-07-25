@@ -44,7 +44,7 @@ fi
 echo -e "\n----------- Waiting for PostgreSQL to be up and running"
 RETRIES=30
 # wait and kill the cron extension at the first successful attempt, it's not part of the Windows installers, can cause issues on restore
-until docker compose exec db /bin/bash -c 'echo ${POSTGRES_PASS} psql -h 127.0.0.1 -U ${POSTGRES_USER} -p 5432 ${POSTGRES_DB} -c "drop extension pg_cron" > /dev/null 2>&1' || [ $RETRIES -eq 0 ]; do
+until docker exec -it 18fee570a7c8 /bin/bash -c 'echo ${POSTGRES_PASS} psql -h 127.0.0.1 -U ${POSTGRES_USER} -p 5432 ${POSTGRES_DB} -c "drop extension pg_cron" > /dev/null 2>&1' || [ $RETRIES -eq 0 ]; do
   echo "Waiting for PostgreSQL, $((RETRIES-=1)) remaining attempts..."
   sleep 2
 done
