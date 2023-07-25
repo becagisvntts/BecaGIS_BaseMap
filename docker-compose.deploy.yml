@@ -35,7 +35,7 @@ services:
     healthcheck:
       test: "PGPASSWORD=${POSTGRES_PASS} pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
 
-  geoserver:
+  osm-geoserver:
     << : *default-common
     image: ttungbmt/geoserver:${GEOSERVER_VERSION}
     environment:
@@ -51,17 +51,15 @@ services:
       - SAMPLE_DATA=${GEOSERVER_SAMPLE_DATA}
       - XFRAME_OPTIONS=${XFRAME_OPTIONS}
       - ROOT_WEBAPP_REDIRECT=${ROOT_WEBAPP_REDIRECT}
-      - POSTGRES_ENDPOINT=${POSTGRES_DB}
+      - POSTGRES_ENDPOINT=${POSTGRES_ENDPOINT}
       - POSTGRES_PORT=5432
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - OSM_DB=${POSTGRES_DB}
       - OSM_SCHEMA=public
-      - ADDITIONAL_JAVA_STARTUP_OPTIONS=${ADDITIONAL_JAVA_STARTUP_OPTIONS}
+      - ADDITIONAL_JAVA_STARTUP_OPTIONS="${ADDITIONAL_JAVA_STARTUP_OPTIONS}"
     volumes:
       - ${GEOSERVER_DATA}:/opt/geoserver/data_dir
-    ports:
-      - ${GEOSERVER_PORT}:8080
     networks:
       - default
       - proxy_overlay
