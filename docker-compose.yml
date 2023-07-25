@@ -23,7 +23,9 @@ services:
 
   geoserver:
     image: ttungbmt/geoserver:${GEOSERVER_VERSION}
-    build: .
+    build:
+      args:
+        - GEOSERVER_VERSION=${GEOSERVER_VERSION}
     restart: on-failure
     environment:
       - TOMCAT_EXTRAS=${TOMCAT_EXTRAS}
