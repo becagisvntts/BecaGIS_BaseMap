@@ -7,3 +7,5 @@ RUN apt-get update -y \
     && apt-get install -y \
         telnet iputils-ping \ 
         fonts-noto fonts-dejavu unifont fonts-hanazono
+
+COPY ./fonts /opt/fonts
