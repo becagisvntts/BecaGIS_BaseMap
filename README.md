@@ -206,7 +206,8 @@ LayerGroup: `osm_cust_bg`
 | osm:waterways                 | waterways_cust        |
 | osm:vn_boundary_mask          | vn_boundary_mask      |
 | osm:osm_transport_areas       | transport_areas       |
-| osm:osm:roads                 | roads_cust            |
+| osm:roads                     | roads_cust            |
+| osm:roads                     | roads_oneway          |
 | osm:osm_buildings             | buildings_cust        |
 | osm:wld_boundary              | wld_boundary          |
 | osm:vn_admin_ln               | vn_admin_ln           |
@@ -232,7 +233,8 @@ LayerGroup: `osm_cust`
 
 ## Tích hợp Basemap vô các phần mềm GIS
 
-Basemap Url: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
+Basemap
+Url: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
 
 ### QGIS
 
@@ -243,7 +245,8 @@ Tại Browser Panel, tại mục XYZ Tiles, Right-Click chọn New Connection
 Nhập các thông tin
 
 - Name: BecaGIS BaseMap
-- URL: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
+-
+URL: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
 
 Double Click vào XYZ Tile vừa thêm để hiển thị Basemap
 
@@ -255,14 +258,15 @@ Tại Map Tab, mục Layer, chọn Add Data > Add Data From Path
 
 ![1691648987.png](assets/1691648987.png)
 
-Nhập Basemap URL vào ô nhập Path `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}` và nhấn nút Add
+Nhập Basemap URL vào ô nhập
+Path `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
+và nhấn nút Add
 
 ![1691649178.png](assets/1691649178.png)
 
 Kết quả
 
 ![1691649476.png](assets/1691649476.png)
-
 
 ### ArcGIS Online
 
@@ -271,13 +275,16 @@ Tại giao diện Map Viewer, chọn menu Layer tại SidePanel, nhấn nút mũ
 ![1691650192.png](assets/1691650192.png)
 
 Nhập các thông tin:
-- URL: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
+
+-
+URL: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
 - Type: Tile Layer
 - Use as basemap: Yes
 
 ![1691650206.png](assets/1691650206.png)
 
 Tiếp tục nhập các thông tin và nhấn nút `Add to map`
+
 - Title: BecaGIS Basemap
 - Attribution: BecaGIS
 
@@ -287,11 +294,9 @@ Kết quả hiển thị
 
 ![1691650275.png](assets/1691650275.png)
 
-
 ### Leaflet
 
 ### MapBox GL
-
 
 ## Links
 
