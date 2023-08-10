@@ -72,9 +72,11 @@ Danh sách dữ liệu OSM Low Resolution
 ## Deployment
 
 ### Đẩy dữ liệu vào PostgreSQL
+
 Tải dữ liệu OSM (vietnam-latest.osm.pbf) đặt tại thư mục gốc
 
 Cấu hình biến trong file .env
+
 - POSTGRES_DB
 - POSTGRES_USER
 - POSTGRES_PASS
@@ -87,17 +89,18 @@ Thực thi command:
 ```
 
 ### Deploy GeoServer
+
 Tải bộ source về
 
 ```shell
 git clone https://github.com/laragis/My_OSM.git
 ```
+
 Tạo .env từ file .env.example
 
 Cập nhật các biến môi trường
 
 Chạy command: `docker compose up -d`
-
 
 ## Thiết kế style
 
@@ -111,7 +114,8 @@ https://wiki.openstreetmap.org/wiki/Zoom_levels
 
 ### Quy phạm địa chính trong thiết kế
 
-Sử dụng `Ký hiệu bản đồ địa chính tỷ lệ 1:200; 1:500; 1:1000; 1:2000; 1:5000 và 1:10 000` theo Thông tư số: /2009/QĐ-BTNMT
+Sử dụng `Ký hiệu bản đồ địa chính tỷ lệ 1:200; 1:500; 1:1000; 1:2000; 1:5000 và 1:10 000` theo Thông tư số:
+/2009/QĐ-BTNMT
 
 ### Sắp xếp thứ tự các lớp
 
@@ -159,42 +163,58 @@ Tạo LayerGroup để quản lý các lớp bản đồ
 
 ### Thiết style theo từng lớp
 
-| Layer                                | Style             | Description |
-|--------------------------------------|-------------------|-------------|
-| ne_10m_bathymetry                    | bathymetry_light  |             |
-| simplified_water_polygons            | simplified_water  |             |
-| water_polygon                        | water             |             |
-| land_polygon                         | coast_poly        |             |
-| simplified_land_polygons             | world             |             |
-| icesheet_polygons                    | icesheet          |             |
-| icesheet_outlines                    | icesheet_outlines |             |
-| ne_10m_admin_1_states_provines_lines | all_regions       |             |
-| landusages                           | landusages        |             |
-| waterareas                           | waterareas        |             |
-| waterways                            | waterways         |             |
-| builtup_area                         | buildup           |             |
-| ne_10m_admin_0_boundary_lines_land   | all_boundaries    |             |
-| osm_boundary                         | boundaries        |             |
-| osm_transport_areas                  | transport_areas   |             |
-| osm_buildings                        | buildings         |             |
-| roads                                | roads             |             |
-| ne_10m_admin_0_countries_points      | states            |             |
-| osm_housenumbers                     | addresses         |             |
-| osm_admin                            | admin_labels      |             |
-| osm_places                           | places            |             |
-| osm_amenities                        | amenities         |             |
-| osm_transport_points                 | transport_points  |             |
+LayerGroup: `osm_cust_bg`
+
+| Layer                         | Style                 |
+|-------------------------------|-----------------------|
+| osm:ne_10m_bathymetry         | bathymetry_cust       |
+| osm:simplified_water_polygons | simplified_water_cust |
+| osm:water_polygons            | water_cust            |
+| osm:simplified_land_polygons  | world_cust            |
+| osm:land_polygons             | coast_poly_cust       |
+| osm:icesheet_polygons         | icesheet              |
+| osm:vn_vietnam                | vn_vietnam            |
+| osm:landusages                | landusages_cust       |
+| osm:waterareas                | waterareas_cust       |
+| osm:waterways                 | waterways_cust        |
+| osm:vn_boundary_mask          | vn_boundary_mask      |
+| osm:osm_transport_areas       | transport_areas       |
+| osm:osm:roads                 | roads_cust            |
+| osm:osm_buildings             | buildings_cust        |
+| osm:wld_boundary              | wld_boundary          |
+| osm:vn_admin_ln               | vn_admin_ln           |
+
+LayerGroup: `osm_cust_labels`
+
+| Layer                 | Style             |
+|-----------------------|-------------------|
+| osm:wld_continents_pt | wld_continents_pt |
+| osm:wld_oceans_pt     | wld_oceans_pt     |
+| osm:vn_sea_ln         | vn_sea_ln         |
+| osm:vn_islands_pt     | vn_island_pt      |
+| osm:wld_cities        | wld_cities        |
+| osm:wld_admin_pt      | wld_admin_pt      |
+| osm:vn_admin_pt       | vn_admin_pt       |
+
+LayerGroup: `osm_cust`
+
+| Layer               |
+|---------------------|
+| osm:osm_cust_bg     |
+| osm:osm_cust_labels |
 
 ## Tích hợp Basemap vô các phần mềm GIS
 
 Basemap Url: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
 
 ### QGIS
+
 Tại Browser Panel, tại mục XYZ Tiles, Right-Click chọn New Connection
 
 ![1691640033.png](assets/1691640033.png)
 
 Nhập các thông tin
+
 - Name: BecaGIS BaseMap
 - URL: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
 
@@ -204,13 +224,47 @@ Double Click vào XYZ Tile vừa thêm để hiển thị Basemap
 
 ### ArcGIS Pro
 
+Tại Map Tab, mục Layer, chọn Add Data > Add Data From Path
+
+![1691648987.png](assets/1691648987.png)
+
+Nhập Basemap URL vào ô nhập Path `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}` và nhấn nút Add
+
+![1691649178.png](assets/1691649178.png)
+
+Kết quả
+
+![1691649476.png](assets/1691649476.png)
+
+
+### ArcGIS Online
+
+Tại giao diện Map Viewer, chọn menu Layer tại SidePanel, nhấn nút mũi tên xuống cạnh nút Add, chọn Add Layer From URL
+
+![1691650192.png](assets/1691650192.png)
+
+Nhập các thông tin:
+- URL: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
+- Type: Tile Layer
+- Use as basemap: Yes
+
+![1691650206.png](assets/1691650206.png)
+
+Tiếp tục nhập các thông tin và nhấn nút `Add to map`
+- Title: BecaGIS Basemap
+- Attribution: BecaGIS
+
+![1691650220.png](assets/1691650220.png)
+
+Kết quả hiển thị
+
+![1691650275.png](assets/1691650275.png)
+
+
 ### Leaflet
 
 ### MapBox GL
 
-### ArcGIS Desktop
-
-### ArcGIS Online
 
 ## Links
 
@@ -222,10 +276,3 @@ Double Click vào XYZ Tile vừa thêm để hiển thị Basemap
 - https://github.com/Overv/openstreetmap-tile-server
 - https://github.com/geobeyond/geoserver-clustering-playground
 - https://github.com/openmaptiles/import-osm
-
-## Dump
-
-```shell
-git submodule add -b osm_data https://github.com/laragis/My_OSM.git osm_data
-./scripts/import.sh -i ./vietnam-latest.osm.pbf
-```
