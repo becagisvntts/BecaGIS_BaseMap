@@ -19,38 +19,38 @@ Truy cập [link](https://wiki.openstreetmap.org/wiki/Map_features) để xem m�
 
 Danh sách dữ liệu OSM nạp vào CSDL
 
-| Layer                | EPSG | Feature Type          | Mô tả |
-|----------------------|------|-----------------------|-------|
-| osm_admin            | 3857 | Polygon               |       |
-| osm_amenities        | 3857 | Polygon               |       |
-| osm_barrierpoints    | 3857 | Point                 |       |
-| osm_barrierways      | 3857 | Linestring            |       |
-| osm_boundary         | 3857 | Linestring            |       |
-| osm_buildings        | 3857 | Polygon               |       |
-| osm_housenumbers     | 3857 | Polygon               |       |
-| osm_landusages       | 3857 | Polygon               |       |
-| osm_places           | 3857 | Point                 |       |
-| osm_roads            | 3857 | Linestring            |       |
-| osm_transport_areas  | 3857 | Polygon               |       |
-| osm_transport_points | 3857 | Point                 |       |
-| osm_waterareas       | 3857 | Polygon, MultiPolygon |       |
-| osm_waterways        | 3857 | Linestring            |       |
+| Layer                | EPSG | Feature Type          | Mô tả                                    |
+|----------------------|------|-----------------------|------------------------------------------|
+| osm_admin            | 3857 | Polygon               | Các cấp hành chính                       |
+| osm_amenities        | 3857 | Polygon               | Tiện nghi (quán bar, cafe, nhà hàng,...) |
+| osm_barrierpoints    | 3857 | Point                 | Rào chắn                                 |
+| osm_barrierways      | 3857 | Linestring            | Rào chắn                                 |
+| osm_boundary         | 3857 | Linestring            | Ranh giới hành chính các cấp             |
+| osm_buildings        | 3857 | Polygon               | Tòa nhà                                  |
+| osm_housenumbers     | 3857 | Polygon               | Số nhà                                   |
+| osm_landusages       | 3857 | Polygon               | Sử dụng đất                              |
+| osm_places           | 3857 | Point                 |                                          |
+| osm_roads            | 3857 | Linestring            | Đường giao thông                         |
+| osm_transport_areas  | 3857 | Polygon               | Khu vực giao thông                       |
+| osm_transport_points | 3857 | Point                 | Điểm giao thông                          |
+| osm_waterareas       | 3857 | Polygon, MultiPolygon | Vùng thủy                                |
+| osm_waterways        | 3857 | Linestring            | Đường thủy                               |
 
 Danh sách dữ liệu OSM Low Resolution
 
-| Layer                                 | EPSG | Feature Type | Mô tả |
-|---------------------------------------|------|--------------|-------|
-| builtup_area                          | 3857 | Polygon      |       |
-| icesheet_outlines                     | 3857 | Linestring   |       |
-| icesheet_polygons                     | 3857 | Polygon      |       |
-| land_polygons                         | 3857 | Polygon      |       |
-| ne_10m_admin_0_boundary_lines_land    | 3857 | Linestring   |       |
-| ne_10m_admin_0_countries_points       | 3857 | Point        |       |
-| ne_10m_admin_1_states_provinces_lines | 3857 | Linestring   |       |
-| ne_10m_bathymetry                     | 3857 | Polygon      |       |
-| ne_10m_geography_marine_polys         | 3857 | Polygon      |       |
-| simplified_land_polygons              | 3857 | Polygon      |       |
-| water_polygons                        | 3857 | Polygon      |       |
+| Layer                                 | EPSG | Feature Type | Mô tả             |
+|---------------------------------------|------|--------------|-------------------|
+| builtup_area                          | 3857 | Polygon      | Khu vực xây dựng  |
+| icesheet_outlines                     | 3857 | Linestring   | Outline tảng băng |
+| icesheet_polygons                     | 3857 | Polygon      | Vùng tảng băng    |
+| land_polygons                         | 3857 | Polygon      | Vùng đất          |
+| ne_10m_admin_0_boundary_lines_land    | 3857 | Linestring   | Đường ranh giới   |
+| ne_10m_admin_0_countries_points       | 3857 | Point        | Vị trí quốc gia   |
+| ne_10m_admin_1_states_provinces_lines | 3857 | Linestring   | Ranh giới tỉnh    |
+| ne_10m_bathymetry                     | 3857 | Polygon      | Ảnh đo độ sâu     |
+| ne_10m_geography_marine_polys         | 3857 | Polygon      | Vùng biển         |
+| simplified_land_polygons              | 3857 | Polygon      | Vùng đất          |
+| water_polygons                        | 3857 | Polygon      | Vùng biển         |
 
 ### BecaGIS
 
@@ -72,12 +72,38 @@ Danh sách dữ liệu OSM Low Resolution
 ## Deployment
 
 ### Đẩy dữ liệu vào PostgreSQL
+Tải dữ liệu OSM (vietnam-latest.osm.pbf) đặt tại thư mục gốc
+
+Cấu hình biến trong file .env
+- POSTGRES_DB
+- POSTGRES_USER
+- POSTGRES_PASS
+- POSTGRES_PORT
+
+Thực thi command:
+
+```shell
+./scripts/import.sh -i ./vietnam-latest.osm.pbf
+```
 
 ### Deploy GeoServer
+Tải bộ source về
+
+```shell
+git clone https://github.com/laragis/My_OSM.git
+```
+Tạo .env từ file .env.example
+
+Cập nhật các biến môi trường
+
+Chạy command: `docker compose up -d`
+
 
 ## Thiết kế style
 
 ### Cập nhật fonts
+
+Truy cập Link: `http://localhost:8080/geoserver/rest/fonts.json` để kiểm tra fonts đã được thêm mới
 
 ### Mô tả các mức zoom
 
@@ -85,23 +111,106 @@ https://wiki.openstreetmap.org/wiki/Zoom_levels
 
 ### Quy phạm địa chính trong thiết kế
 
+Sử dụng `Ký hiệu bản đồ địa chính tỷ lệ 1:200; 1:500; 1:1000; 1:2000; 1:5000 và 1:10 000` theo Thông tư số: /2009/QĐ-BTNMT
+
 ### Sắp xếp thứ tự các lớp
+
+Tạo LayerGroup để quản lý các lớp bản đồ
+
+- osm_cust_bg
+    - osm:ne_10m_bathymetry
+    - osm:simplified_water_polygons
+    - osm:water_polygons
+    - osm:land_polygons
+    - osm:simplified_land_polygons
+    - osm:icesheet_polygons
+    - osm:icesheet_outlines
+    - osm:ne_10m_admin_1_states_provinces_lines (Removed)
+    - osm:landusages
+    - osm:waterareas
+    - osm:waterways
+    - osm:builtup_area (Removed)
+    - osm:vn_boundary_mask (Added)
+    - osm:osm_transport_areas
+    - osm:roads
+    - osm:osm_buildings
+    - osm:ne_10m_admin_0_boundary_lines_land (Replaced wld_boundary)
+    - osm:ne_10m_admin_0_countries_points
+    - osm:osm_housenumbers
+    - osm:osm_admin
+    - osm:osm_places
+    - osm:osm_amenities
+    - osm:osm_transport_points
+- osm_cust_labels
+    - wld_continents_pt
+    - wld_oceans_pt
+    - wld_islands_pt
+    - wld_admin_pt
+    - wld_cities
+    - osm:osm_housenumbers (Optional)
+- osm_cust
+    - osm_cust_bg
+    - osm_cust_labels
+- osm_cust_hillshade
+    - osm_cust_bg
+    - osm_cust_labels
+    - wld_hillshade
+    - vn_hillshade
 
 ### Thiết style theo từng lớp
 
+| Layer                                | Style             | Description |
+|--------------------------------------|-------------------|-------------|
+| ne_10m_bathymetry                    | bathymetry_light  |             |
+| simplified_water_polygons            | simplified_water  |             |
+| water_polygon                        | water             |             |
+| land_polygon                         | coast_poly        |             |
+| simplified_land_polygons             | world             |             |
+| icesheet_polygons                    | icesheet          |             |
+| icesheet_outlines                    | icesheet_outlines |             |
+| ne_10m_admin_1_states_provines_lines | all_regions       |             |
+| landusages                           | landusages        |             |
+| waterareas                           | waterareas        |             |
+| waterways                            | waterways         |             |
+| builtup_area                         | buildup           |             |
+| ne_10m_admin_0_boundary_lines_land   | all_boundaries    |             |
+| osm_boundary                         | boundaries        |             |
+| osm_transport_areas                  | transport_areas   |             |
+| osm_buildings                        | buildings         |             |
+| roads                                | roads             |             |
+| ne_10m_admin_0_countries_points      | states            |             |
+| osm_housenumbers                     | addresses         |             |
+| osm_admin                            | admin_labels      |             |
+| osm_places                           | places            |             |
+| osm_amenities                        | amenities         |             |
+| osm_transport_points                 | transport_points  |             |
+
 ## Tích hợp Basemap vô các phần mềm GIS
 
-### QGIS
+Basemap Url: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
 
-### ArcGIS Desktop
+### QGIS
+Tại Browser Panel, tại mục XYZ Tiles, Right-Click chọn New Connection
+
+![1691640033.png](assets/1691640033.png)
+
+Nhập các thông tin
+- Name: BecaGIS BaseMap
+- URL: `https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`
+
+Double Click vào XYZ Tile vừa thêm để hiển thị Basemap
+
+![1691640330.png](assets/1691640330.png)
 
 ### ArcGIS Pro
-
-### ArcGIS Online
 
 ### Leaflet
 
 ### MapBox GL
+
+### ArcGIS Desktop
+
+### ArcGIS Online
 
 ## Links
 
