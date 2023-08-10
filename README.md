@@ -1,5 +1,31 @@
 # BecaGIS Basemap
 
+<!-- TOC -->
+* [BecaGIS Basemap](#becagis-basemap)
+  * [Chuẩn bị dữ liệu](#chuẩn-bị-dữ-liệu)
+    * [Tải dữ liệu](#tải-dữ-liệu)
+    * [Tải fonts](#tải-fonts)
+  * [Mô tả dữ liệu](#mô-tả-dữ-liệu)
+    * [OSM](#osm)
+    * [BecaGIS](#becagis)
+  * [Deployment](#deployment)
+    * [Đẩy dữ liệu vào PostgreSQL](#đẩy-dữ-liệu-vào-postgresql)
+    * [Deploy GeoServer](#deploy-geoserver)
+  * [Thiết kế style](#thiết-kế-style)
+    * [Cập nhật fonts](#cập-nhật-fonts)
+    * [Mô tả các mức zoom](#mô-tả-các-mức-zoom)
+    * [Quy phạm địa chính trong thiết kế](#quy-phạm-địa-chính-trong-thiết-kế)
+    * [Sắp xếp thứ tự các lớp](#sắp-xếp-thứ-tự-các-lớp)
+    * [Thiết style theo từng lớp](#thiết-style-theo-từng-lớp)
+  * [Tích hợp Basemap vô các phần mềm GIS](#tích-hợp-basemap-vô-các-phần-mềm-gis)
+    * [QGIS](#qgis)
+    * [ArcGIS Pro](#arcgis-pro)
+    * [ArcGIS Online](#arcgis-online)
+    * [Leaflet](#leaflet)
+    * [MapBox GL](#mapbox-gl)
+  * [Links](#links)
+<!-- TOC -->
+
 ## Chuẩn bị dữ liệu
 
 ### Tải dữ liệu
