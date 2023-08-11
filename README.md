@@ -296,7 +296,46 @@ Kết quả hiển thị
 
 ### Leaflet
 
+```js
+// Khởi tạo TileLayer
+let bcg_osm = L.tileLayer('https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}');
+
+// Thêm Basemap vào bản đồ
+bcg_osm.addTo(map);
+```
+
 ### MapBox GL
+
+```js
+// Khởi tạo Map Instance với Basemap mặc định
+const map = new mapboxgl.Map({
+  container: 'map', // container ID
+  style: {
+    'version': 8,
+    'sources': {
+      'raster-tiles': {
+        'type': 'raster',
+        'tiles': [
+            'https://maps.becagis.vn/geoserver/osm/gwc/service/wmts?layer=osm:osm_cust&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}'
+        ],
+        'tileSize': 256    
+      }
+    },
+    'layers': [
+        {
+        'id': 'bcg-osm-tiles',
+        'type': 'raster',
+        'source': 'raster-tiles',
+        'minzoom': 0,
+        'maxzoom': 22
+        }
+    ]
+  },
+  center: [16.2146745,105.776367], 
+  zoom: 6
+});
+
+```
 
 ## Links
 
