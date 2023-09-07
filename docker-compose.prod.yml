@@ -14,9 +14,9 @@ services:
   nginx:
     image: nginx
     ports:
-      - "180:80"
-   # volumes:
-     # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - "${GEOSERVER_PORT}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
   osm_geoserver:
     image: ttungbmt/geoserver:${GEOSERVER_VERSION}
     container_name: osm_geoserver
@@ -47,7 +47,7 @@ services:
     volumes:
       - ${GEOSERVER_DATA}:/opt/geoserver/data_dir
     ports:
-      - ${GEOSERVER_PORT}:8080
+      - 180:8080
     healthcheck:
       test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null -u ${GEOSERVER_ADMIN_USER}:'${GEOSERVER_ADMIN_PASSWORD}' http://localhost:8080/geoserver/rest/about/version.xml"
       interval: 1m30s
