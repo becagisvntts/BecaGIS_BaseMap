@@ -1,0 +1,59 @@
+version: '3.9'
+
+networks:
+  proxy_overlay:
+    external: true
+  db_overlay:
+    external: true
+
+volumes:
+  geoserver-data:
+  geo-db-data:
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "180:80"
+   # volumes:
+     # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  osm_geoserver:
+    image: ttungbmt/geoserver:${GEOSERVER_VERSION}
+    container_name: osm_geoserver
+    build:
+      args:
+        - GEOSERVER_VERSION=${GEOSERVER_VERSION}
+    environment:
+      - TOMCAT_EXTRAS=${TOMCAT_EXTRAS}
+      - TOMCAT_USER=${TOMCAT_USER}
+      - TOMCAT_PASSWORD=${TOMCAT_PASSWORD}
+      - GEOSERVER_ADMIN_USER=${GEOSERVER_ADMIN_USER}
+      - GEOSERVER_ADMIN_PASSWORD=${GEOSERVER_ADMIN_PASSWORD}
+      - STABLE_EXTENSIONS=${GEOSERVER_STABLE_EXTENSIONS}
+      - COMMUNITY_EXTENSIONS=${GEOSERVER_COMMUNITY_EXTENSIONS}
+      - INITIAL_MEMORY=${GEOSERVER_INITIAL_MEMORY}
+      - MAXIMUM_MEMORY=${GEOSERVER_MAXIMUM_MEMORY}
+      - SAMPLE_DATA=${GEOSERVER_SAMPLE_DATA}
+      - XFRAME_OPTIONS=${XFRAME_OPTIONS}
+      - ROOT_WEBAPP_REDIRECT=${ROOT_WEBAPP_REDIRECT}
+      - POSTGRES_ENDPOINT=${POSTGRES_ENDPOINT}
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - OSM_DB=${POSTGRES_DB}
+      - OSM_EXTRAS_DB=${POSTGRES_DB_EXTRAS}
+      - OSM_SCHEMA=public
+      - ADDITIONAL_JAVA_STARTUP_OPTIONS=${ADDITIONAL_JAVA_STARTUP_OPTIONS}
+    volumes:
+      - ${GEOSERVER_DATA}:/opt/geoserver/data_dir
+    ports:
+      - ${GEOSERVER_PORT}:8080
+    healthcheck:
+      test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null -u ${GEOSERVER_ADMIN_USER}:'${GEOSERVER_ADMIN_PASSWORD}' http://localhost:8080/geoserver/rest/about/version.xml"
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - default
+      - proxy_overlay
+      - db_overlay
